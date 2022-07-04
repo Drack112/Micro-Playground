@@ -1,0 +1,8 @@
+/.vscode
+/.idea
+
+/venv
+/media
+/locales
+
+/.env

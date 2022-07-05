@@ -3,7 +3,7 @@ version: "3"
 services:
   web:
     build: .
-    container_name: "web-app-server"
+    container_name: "web-django-server"
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/home/app
@@ -15,10 +15,11 @@ services:
       - ./.env
     depends_on:
       - db
+      - rabbitmq
 
   db:
     image: postgres:13.0-alpine
-    container_name: "postgres-db-server"
+    container_name: "postgres-db-django-server"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -29,6 +30,20 @@ services:
       - postgres
     env_file:
       - ./.env
+
+  rabbitmq:
+    container_name: "rabbitmq-django-server"
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=test
+    ports:
+      # AMQP protocol port
+      - "5672:5672"
+      # HTTP management UI
+      - "15672:15672"
+    networks:
+      - postgres
 
   pgadmin:
     container_name: "pgadmin-django-server"

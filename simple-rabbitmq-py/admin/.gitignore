@@ -1,7 +1,7 @@
 /.vscode
 /.idea
 
-/venv
+/.venv
 /media
 /locales
 
